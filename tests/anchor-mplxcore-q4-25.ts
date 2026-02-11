@@ -4,6 +4,7 @@ import { AnchorMplxcoreQ425 } from "../target/types/anchor_mplxcore_q4_25";
 import { PublicKey, Keypair, SystemProgram } from "@solana/web3.js";
 import { assert } from "chai";
 import { MPL_CORE_PROGRAM_ID } from "@metaplex-foundation/mpl-core";
+import NamespaceFactory from "@coral-xyz/anchor/dist/cjs/program/namespace";
 
 describe("anchor-mplxcore-q4-25", () => {
   // Configure the client to use the local cluster.
@@ -305,8 +306,9 @@ describe("anchor-mplxcore-q4-25", () => {
 
   describe("UpdateNft", () => {
     it("Update an NFT", async () => {
+      const name = "New Test NFT"
       await program.methods
-        .updateNft()
+        .updateNft(name)
         .accountsStrict({
           authority: creator.publicKey,
           asset: asset.publicKey,
