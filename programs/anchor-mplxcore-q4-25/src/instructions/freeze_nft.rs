@@ -9,9 +9,9 @@ use crate::{error::MPLXCoreError, state::CollectionAuthority};
 pub struct FreezeNft<'info> {
     #[account(
         mut,
-        constraint = payer.key() == collection_authority.creator @ MPLXCoreError::NotAuthorized
+        constraint = authority.key() == collection_authority.creator @ MPLXCoreError::NotAuthorized
     )]
-    pub payer: Signer<'info>,
+    pub authority: Signer<'info>,
 
     #[account(
         mut,
@@ -52,7 +52,7 @@ impl<'info> FreezeNft<'info> {
         UpdatePluginV1CpiBuilder::new(&self.core_program.to_account_info())
             .asset(&self.asset.to_account_info())
             .collection(Some(&self.collection.to_account_info()))
-            .payer(&self.payer.to_account_info())
+            .payer(&self.authority.to_account_info())
             .authority(Some(&self.collection_authority.to_account_info()))
             .system_program(&self.system_program.to_account_info())
             .plugin(Plugin::FreezeDelegate(FreezeDelegate{frozen: true}))
