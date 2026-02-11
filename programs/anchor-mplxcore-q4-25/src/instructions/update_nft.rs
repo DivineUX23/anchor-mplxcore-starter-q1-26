@@ -65,6 +65,7 @@ impl <'info> UpdateNft <'info> {
             self.authority.to_account_info(),
             self.collection_authority.to_account_info(),
             self.system_program.to_account_info(),
+            self.core_program.to_account_info(),
         ];        
 
         solana_program::program::invoke_signed(

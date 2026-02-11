@@ -302,4 +302,22 @@ describe("anchor-mplxcore-q4-25", () => {
       }
     });
   });
+
+  describe("UpdateNft", () => {
+    it("Update an NFT", async () => {
+      await program.methods
+        .updateNft()
+        .accountsStrict({
+          authority: creator.publicKey,
+          asset: asset.publicKey,
+          collection: collection.publicKey,
+          collectionAuthority: collectionAuthorityPda,
+          coreProgram: MPL_CORE_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([creator])
+        .rpc();
+    });
+  });
+
 });
