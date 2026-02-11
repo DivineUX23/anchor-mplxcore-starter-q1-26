@@ -7,12 +7,15 @@ use crate::{error::MPLXCoreError, state::CollectionAuthority};
 
 #[derive(Accounts)]
 pub struct FreezeNft<'info> {
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = payer.key() == collection_authority.creator @ MPLXCoreError::NotAuthorized
+    )]
     pub payer: Signer<'info>,
 
     #[account(
         mut,
-        constraint = asset.owner == &core_program.key()
+        constraint = asset.owner == &CORE_PROGRAM_ID
     )]
     pub asset: UncheckedAccount<'info>,
 
@@ -37,7 +40,7 @@ pub struct FreezeNft<'info> {
 
 impl<'info> FreezeNft<'info> {
     pub fn freeze_nft(&mut self) -> Result<()> {
-        let singer_seeds: &[&[&[u8]]] = &[&[
+        let signer_seeds: &[&[&[u8]]] = &[&[
             b"collection_authority",
             &self.collection.key().to_bytes(),
             &[self.collection_authority.bump]
@@ -50,7 +53,7 @@ impl<'info> FreezeNft<'info> {
             .authority(Some(&self.collection_authority.to_account_info()))
             .system_program(&self.system_program.to_account_info())
             .plugin(Plugin::FreezeDelegate(FreezeDelegate{frozen: true}))
-            .invoke_signed(singer_seeds)?;
+            .invoke_signed(signer_seeds)?;
 
         Ok(())
     }
