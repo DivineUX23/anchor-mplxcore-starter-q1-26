@@ -19,6 +19,7 @@ pub struct ThawNft<'info> {
         mut,
         constraint = asset.owner == &CORE_PROGRAM_ID
     )]
+    /// CHECK: Validated by checking
     pub asset: UncheckedAccount<'info>,
 
     #[account(
@@ -26,6 +27,7 @@ pub struct ThawNft<'info> {
         constraint = collection.owner == &CORE_PROGRAM_ID @ MPLXCoreError::InvalidCollection,
         constraint = !collection.data_is_empty() @ MPLXCoreError::CollectionNotInitialized
     )]
+    /// CHECK: Validated by checking
     pub collection: UncheckedAccount<'info>,
     
     #[account(
@@ -36,6 +38,7 @@ pub struct ThawNft<'info> {
     pub collection_authority: Account<'info, CollectionAuthority>,
 
     #[account(address = CORE_PROGRAM_ID)]
+    /// CHECK: Validated by checking
     pub core_program: UncheckedAccount<'info>,
 
     pub system_program: Program<'info, System>
