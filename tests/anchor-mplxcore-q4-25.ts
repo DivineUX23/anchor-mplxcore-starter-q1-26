@@ -319,6 +319,12 @@ describe("anchor-mplxcore-q4-25", () => {
         })
         .signers([creator])
         .rpc();
+      
+      const assetInfo = await provider.connection.getAccountInfo(asset.publicKey);
+      assert.ok(assetInfo, "Asset info not found")
+
+      const rawData = assetInfo.data.toString();
+      assert.include(rawData, name, "Updated name not found")
     });
   });
 
